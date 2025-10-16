@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>自动驾驶论文知识树 · 50篇（可筛选）</title>
+  <style>
+    :root{
+      --bg:#1b1f2a;
+      --panel:#242a3a;
+      --panel-border:rgba(255,255,255,0.08);
+      --muted:#9ea7c2;
+      --card:#2a3144;
+      --card-hover:#323a51;
+      --accent:#78bdfb;
+      --accent-soft:#2d83df;
+      --chip-bg:#2f3a52;
+      --chip-border:rgba(120,189,251,0.4);
+      --chip-on:#3d70f5;
+      --text:#f4f6fb;
+      --text-soft:#d3d8e9;
+      --text-muted:#aeb6d3;
+      --shadow:0 16px 32px rgba(8,12,28,0.32);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Helvetica,Arial;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{color:#9ed2ff}
+    .container{max-width:1080px;margin:0 auto;padding:48px 24px 64px}
+    .title{font-size:32px;font-weight:800;letter-spacing:.4px;margin-bottom:8px}
+    .sub{color:var(--muted);font-size:16px;line-height:1.6;margin-bottom:24px}
+    .panel{background:var(--panel);border:1px solid var(--panel-border);border-radius:20px;padding:24px;margin:24px 0;box-shadow:var(--shadow)}
+    .filters{display:grid;gap:16px;grid-template-columns:repeat(1,minmax(0,1fr))}
+    @media(min-width:720px){.filters{grid-template-columns:2fr 1fr 1fr}}
+    .controls-row{display:flex;gap:12px;flex-wrap:wrap}
+    .input,.select{width:100%;background:#1f2533;border:1px solid rgba(255,255,255,0.1);color:var(--text);border-radius:14px;padding:14px 16px;font-size:15px;line-height:1.4;transition:border-color .2s ease,box-shadow .2s ease}
+    .input:focus,.select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(120,189,251,0.25);outline:0}
+    .select{appearance:none;background-image:url('data:image/svg+xml;utf8,<svg fill=\"%23aeb6d3\" height=\"12\" viewBox=\"0 0 24 24\" width=\"12\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5z\"/></svg>');background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+    .btn{background:var(--accent-soft);border:1px solid rgba(255,255,255,0.1);color:var(--text);border-radius:14px;padding:12px 18px;font-size:15px;cursor:pointer;font-weight:600;transition:transform .2s ease,box-shadow .2s ease,filter .2s ease}
+    .btn:hover{filter:brightness(1.05);box-shadow:0 8px 20px rgba(45,131,223,0.35);transform:translateY(-1px)}
+    .btn:disabled{opacity:.45;cursor:not-allowed;filter:none;transform:none;box-shadow:none}
+    .chip-bar{display:flex;gap:10px;flex-wrap:wrap}
+    .chip{border:1px solid var(--chip-border);background:var(--chip-bg);padding:8px 14px;border-radius:999px;color:var(--text-soft);cursor:pointer;user-select:none;font-size:13px;letter-spacing:.2px;transition:all .2s ease}
+    .chip[data-on="1"]{background:var(--chip-on);border-color:transparent;color:var(--text)}
+    .chip:focus-visible{outline:2px solid rgba(120,189,251,0.5);outline-offset:2px}
+    .grid{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:28px;margin-top:32px}
+    @media(min-width:840px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(min-width:1280px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:22px;padding:22px 22px 26px;position:relative;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;display:flex;flex-direction:column;gap:18px}
+    .card:hover{transform:translateY(-6px);box-shadow:0 18px 34px rgba(12,16,30,0.35);border-color:rgba(120,189,251,0.35);background:var(--card-hover)}
+    .card-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .card-title{font-size:18px;font-weight:700;color:var(--text);line-height:1.5;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;text-overflow:ellipsis;word-break:break-all}
+    .card-title span{color:var(--muted);font-size:14px;font-weight:500}
+    .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(120,189,251,0.25);color:var(--accent);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.2px;background:rgba(45,131,223,0.08)}
+    .card-id{color:var(--muted);font-size:13px;font-weight:600;background:rgba(255,255,255,0.06);border-radius:10px;padding:4px 8px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{border:1px solid rgba(255,255,255,0.16);border-radius:999px;padding:5px 10px;font-size:12px;color:var(--text-soft);letter-spacing:.2px}
+    .abs{color:var(--text-soft);line-height:1.7;font-size:14px;margin:0}
+    .abs.clamped{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;position:relative}
+    .toggle{align-self:flex-start;background:transparent;border:none;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:0;display:inline-flex;gap:6px;align-items:center;margin-top:-4px}
+    .toggle:hover{color:#9ed2ff}
+    .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .muted{color:var(--muted)}
+    .small{font-size:12px}
+    .divider{height:1px;background:rgba(255,255,255,0.06);margin:18px 0}
+    .footer{margin:40px 0;color:var(--text-muted);font-size:12px;text-align:center}
+    .kbd{border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:6px}
+    .helper-link{color:var(--text-muted);font-size:13px;display:inline-flex;align-items:center;gap:6px}
+    details.helper summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:13px}
+    details.helper{margin-top:4px;color:var(--text-muted);line-height:1.6}
+    @media(max-width:639px){
+      .container{padding:36px 16px 48px}
+      .panel{padding:20px}
+      .card{padding:20px}
+      .card-title{font-size:17px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">自动驾驶论文知识树 · 50篇</div>
+    <div class="sub">应用场景 × 方法论（12 大类） · 支持关键词/类别/场景筛选 · 可本地链接你的 PDF</div>
+
+    <!-- Filter Panel -->
+    <div class="panel" id="filterPanel">
+      <div class="filters">
+        <input id="q" class="input" placeholder="搜索标题 / 摘要 / 标签（例：并道、SMPC、ADMM、超车…）" />
+        <select id="category" class="select">
+          <option value="">全部类别（12 大类）</option>
+        </select>
+        <button id="reset" class="btn">重置筛选</button>
+      </div>
+      <div class="divider"></div>
+      <div class="muted small" style="margin-bottom:6px">场景快速筛选</div>
+      <div class="chip-bar" id="sceneChips"></div>
+      <div class="divider"></div>
+      <details class="helper">
+        <summary>关于本项目</summary>
+        <div>可离线使用的自动驾驶论文清单。若需自定义 PDF 路径，可在源码顶部调整 <code>basePath</code>。</div>
+      </details>
+    </div>
+
+    <!-- Results Info -->
+    <div class="panel" id="infoPanel">
+      <div class="controls">
+        <div>结果：<b id="count">0</b> / 50</div>
+        <div class="muted small" id="activeFilters"></div>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="grid" id="cards"></div>
+
+    <div class="footer small">© 学习清单生成 · 可离线使用 · 按 <span class="kbd">/</span> 快速搜索</div>
+  </div>
+
+<script>
+/**
+ * ===== 配置：PDF 基路径 =====
+ * 将你的 PDF 放到某个目录后，把 basePath 改成相对/绝对路径即可；
+ * 例如："./pdfs" 或 "https://your.cdn/papers"。
+ */
+const basePath = "."; // 当前 HTML 与 PDF 位于同一路径
+
+/**
+ * ===== 先定义场景集合，避免变量未初始化报错 =====
+ */
+const SCENES = ["并道","超车","交叉口","越野","高速","行人"];
+const selectedScenes = new Set(); // ⚠️ 保证在任何函数使用前已初始化
+
+/**
+ * ===== 数据：50 篇论文（id/title/category/abstract/tags） =====
+ * 类别来自 12 大类：
+ * 1. 安全性与可达性理论 2. 状态估计与滤波 3. 决策与博弈 4. 学习与数据驱动控制
+ * 5. MPC 家族 6. 运动规划 / 轨迹规划 7. 特定驾驶场景策略 8. 交互感知与人机协作
+ * 9. 高速公路/越野子域 10. 优化与求解器工程 11. 其他/跨域方法 12. 端到端概念/一体化框架
+ */
+const papers = [
+  {id:16,title:"2307.11515v1-Forward Completeness and Applications to Control.pdf",category:"安全性与可达性理论",abstract:"提出松弛 Lyapunov 条件保证全局正向完备性，并用于无车道巡航控制；可处理碰撞避免、变宽道路、匝道与不同设定速度，确保车辆不碰撞或越界。",tags:["安全","正向完备性","Lyapunov","巡航"]},
+  {id:35,title:"A_new_look_at_the_statistical_model_identification.pdf",category:"其他/跨域方法",abstract:"Akaike 提出 AIC 模型选择准则，替代传统假设检验；以时间序列为例展示其在预测/泛化权衡中的有效性与灵活性。",tags:["AIC","统计建模","模型选择"]},
+  {id:50,title:"An_Angle-Based_Control_Law_for_Target_Location_Stabilization_in_3D_Space.pdf",category:"其他/跨域方法",abstract:"提出仅使用三个地面站方位角测量的 3D 目标定位控制律；无需 GPS，保证全局收敛且与机体坐标无关，适合弱感知环境。",tags:["3D 方位","弱感知","飞行控制"]},
+  {id:7,title:"An_Optimization-Based_Dynamic_Reordering_Heuristic_for_Coordination_of_Vehicles_in_Mixed_Traffic_Intersections.pdf",category:"特定驾驶场景策略",abstract:"在混合交通路口提出动态重排序启发式以协调 CAV 与 HDV 通过顺序；结合违规检查与成本比较显著提效并稳定。",tags:["交叉口","重排序","混合交通"]},
+  {id:29,title:"Automatic_Implementation_of_Neural_Networks_Through_Reaction_NetworksPart_I_Circuit_Design_and_Convergence_Analysis.pdf",category:"其他/跨域方法",abstract:"用生化反应网络（BCRN）实现三层 FCNN：设计分配/前馈/判断/学习/清除模块，并证明指数收敛；为物理可实现学习提供思路。",tags:["BCRN","神经网络","收敛性"]},
+  {id:33,title:"A_Game-Based_Approach_to_Distributed_Least-Distance_Formation_Tracking_With_a_Moving_Target.pdf",category:"决策与博弈",abstract:"提出基于博弈的分布式最小距离编队跟踪：纳什均衡求解 + 一致性协议，使多智能体围绕移动目标形成期望队形并最小化距离。",tags:["编队","博弈","纳什"]},
+  {id:36,title:"Adaptive_Choice_of_Process_Noise_Covariance_in_Kalman_Filter_Using_Measurement_Matrices.pdf",category:"状态估计与滤波",abstract:"基于测量矩阵自适应选择 KF 的过程噪声协方差 Q，避免误差协方差膨胀；GNSS/INS 汽车定位实测优于传统方法。",tags:["卡尔曼","GNSS/INS","Q 调整","定位"]},
+  {id:19,title:"Automatic_Nonlinear_MPC_Approximation_With_Closed-Loop_Guarantees.pdf",category:"MPC 家族",abstract:"ALKIA-X：自动显式近似非线性 MPC，结合核插值、自适应子域划分与 RKHS 外推，给稳定与约束保证，适配高采样率。",tags:["显式 MPC","近似","稳定保证"]},
+  {id:40,title:"Adaptive_Control_Barrier_Functions.pdf",category:"安全性与可达性理论",abstract:"提出自适应 CBF（PACBF/RACBF）以处理时变控制边界与噪声下的可行性；在自适应巡航控制（ACC）中验证有效。",tags:["CBF","安全约束","ACC"]},
+  {id:6,title:"Decision-Making_for_Autonomous_Vehicles_With_Interaction-Aware_Behavioral_Prediction_and_Social-Attention_Neural_Network.pdf",category:"交互感知与人机协作",abstract:"行为模型+贝叶斯滤波+社会注意力网络（SANN）进行交互感知并道决策；模拟与实测数据集上成功完成强制并道。",tags:["并道","意图预测","注意力"]},
+  {id:42,title:"Data-Driven_Closed-Loop_Reachability_Analysis_for_Nonlinear_Human-in-the-Loop_Systems_Using_Gaussian_Mixture_Model.pdf",category:"安全性与可达性理论",abstract:"用 GMM/GMR 显式建模人类策略，做非线性人机闭环系统的前向随机可达性分析，生成更准确、信息量更高的结果。",tags:["可达性","人机闭环","GMM"]},
+  {id:1,title:"How_should_an_autonomous_vehicle_overtake_a_slower_moving_vehicle_design_and_analysis_of_an_optimal_trajectory.pdf",category:"特定驾驶场景策略",abstract:"研究正常条件下的三阶段超车最优轨迹；最小总动能+最小抖动，给出高初速下最佳距离/时间的显式估计公式。",tags:["超车","轨迹优化","高速"]},
+  {id:41,title:"Event-Triggered_and_Intermittent_Emulation_of_Safety-Critical_Controllers_for_Nonlinear_Systems.pdf",category:"安全性与可达性理论",abstract:"在算力/通信受限下，采用动态事件触发与间歇控制仿真安全关键控制器；保证前向不变性、渐近收敛并避免 Zeno。",tags:["事件触发","安全控制","资源受限"]},
+  {id:17,title:"Data-Driven_Combined_Longitudinal_and_Lateral_Control_for_the_Car_Following_Problem.pdf",category:"学习与数据驱动控制",abstract:"采用 ADP+RL 学习车随动纵向/横向联合控制，无需精确模型；在多场景下验证能保持安全距离且稳态控道。",tags:["数据驱动","ADP","RL","车随动"]},
+  {id:24,title:"Data-Driven_Model_Predictive_Control_With_Stability_and_Robustness_Guarantees.pdf",category:"学习与数据驱动控制",abstract:"基于行为系统理论的 DD-MPC：用过去轨迹作隐式模型，无需预识别；证明无噪声指数稳定与有噪声情形的实用指数稳定。",tags:["数据驱动 MPC","稳定性","鲁棒性"]},
+  {id:39,title:"Automated_Controller_Calibration_by_Kalman_Filtering.pdf",category:"状态估计与滤波",abstract:"以卡尔曼滤波递归估计控制器参数，配合训练目标优化闭环性能；已在车载高保真模拟器与嵌入式平台验证可行。",tags:["标定","卡尔曼","参数估计"]},
+  {id:2,title:"Fast_Analytical_Solver_for_Fuel-Optimal_Speed_Trajectory_of_Connected_and_or_Automated_Vehicles.pdf",category:"优化与求解器工程",abstract:"提出解析求解器计算 CAV 燃油最优速度轨迹；利用 BVP 成本动态与可行控制序列识别，显著降时延并提升鲁棒。",tags:["解析求解器","速度规划","燃油优化","高速"]},
+  {id:30,title:"Automatic_Implementation_of_Neural_Networks_Through_Reaction_NetworksPart_II_Error_Analysis.pdf",category:"其他/跨域方法",abstract:"提出 BCRN 实现神经网络的误差分析框架，定义当前/累积误差并给出上界，证明有限时间内误差指数收敛。",tags:["BCRN","误差分析","收敛性"]},
+  {id:37,title:"Distributed_Invariant_Extended_Kalman_Filter_Using_Lie_Groups_Algorithm_and_Experiments.pdf",category:"状态估计与滤波",abstract:"提出 DIEKF（矩阵李群）用于分布式 6DoF 目标跟踪；仅需一跳通信，具备更高一致性与精度，即便目标运动未知。",tags:["分布式估计","IEKF","李群","6DoF"]},
+  {id:49,title:"Toward_Safe_and_Efficient_HumanRobot_Interaction_via_Behavior-Driven_Danger_Signaling.pdf",category:"交互感知与人机协作",abstract:"引入行为驱动的危险信号，基于贝叶斯在线学习更新对人类危险意识的信念，并据此进行机器人/车-人的行动规划。",tags:["行人","危险信号","人机交互"]},
+  {id:48,title:"Experimental_Validation_of_Safe_MPC_for_Autonomous_Driving_in_Uncertain_Environments.pdf",category:"MPC 家族",abstract:"在实际测试车上验证的安全 MPC 框架：面对不确定环境可实时运行，并兼顾安全性与舒适性。",tags:["MPC","实车验证","不确定性"]},
+  {id:20,title:"Approximate_Dynamic_Programming_for_Trajectory_Tracking_of_Switched_Systems.pdf",category:"学习与数据驱动控制",abstract:"面向切换非线性系统的 ADP 轨迹跟踪：多 Lyapunov 与积分并发学习，满足条件下实现局部实际稳定并收敛到近最优。",tags:["ADP","切换系统","轨迹跟踪"]},
+  {id:28,title:"Classification_of_Stochastic_Systems_Deep_Learning_and_Hypothesis_Testing.pdf",category:"其他/跨域方法",abstract:"对连续时间随机微分方程系统进行分类：比较深度学习与假设检验；线性系统中 DL 更优，非线性中亦表现出色。",tags:["随机系统","深度学习","假设检验"]},
+  {id:25,title:"Formulas_for_Data-Driven_Control_Stabilization_Optimality_and_Robustness.pdf",category:"学习与数据驱动控制",abstract:"利用持久激励数据设计线性反馈（无需显式识别 A,B），通过 LMI 处理稳态/输出反馈/LQR 等，并讨论噪声与非线性场景。",tags:["数据驱动","LMI","LQR","稳态"]},
+  {id:8,title:"Interaction-Aware_Traffic_Prediction_and_Scenario-Based_Model_Predictive_Control_for_Autonomous_Vehicles_on_Highways.pdf",category:"MPC 家族",abstract:"IMM-KF 交通预测 + 场景化 MPC（SCMPC），引入最坏情况保证递归可行性；在高速场景仿真验证有效。",tags:["高速","场景化 MPC","IMM-KF"]},
+  {id:43,title:"Safe_and_Quasi-Optimal_Autonomous_Navigation_in_Environments_With_Convex_Obstacles.pdf",category:"运动规划 / 轨迹规划",abstract:"提出连续反馈策略：将标称控制投影至障碍包围锥生成无碰撞轨迹；二维未知环境实现几乎全局渐近到达与近最优性。",tags:["导航","凸障碍","连续反馈"]},
+  {id:44,title:"Proactive_Emergency_Collision_Avoidance_for_Automated_Driving_in_Highway_Scenarios.pdf",category:"MPC 家族",abstract:"高速场景的紧急避碰 SMPC；引入非线性轮胎动力学与 MMPS 近似，提高主动性与实时性，优于内置避碰模块。",tags:["高速","紧急避碰","SMPC","轮胎"]},
+  {id:9,title:"Automated_Lane_Change_via_Adaptive_Interactive_MPC_Human-in-the-Loop_Experiments.pdf",category:"MPC 家族",abstract:"自适应交互 MPC，在软件与人在环实验中提升双车移动性，面向并道/交互超车等人车互动场景。",tags:["并道","交互","MPC","人在环"]},
+  {id:22,title:"BP-MPC_Optimizing_the_Closed-Loop_Performance_of_MPC_Using_Backpropagation.pdf",category:"MPC 家族",abstract:"提出对 MPC 设计参数的可微优化：通过保守雅可比对闭环性能反向传播更新；提供收敛保证，适配非光滑/状态依赖成本。",tags:["可微 MPC","反向传播","性能优化"]},
+  {id:23,title:"Predictive_Control_for_Autonomous_Driving_With_Uncertain_Multimodal_Predictions.pdf",category:"MPC 家族",abstract:"处理多模态预测不确定性的 SMPC；在仿真与实车中实现实时规划与控制。",tags:["SMPC","多模态","城市"]},
+  {id:27,title:"Equivariant_Deep_Learning_of_Mixed-Integer_Optimal_Control_Solutions_for_Vehicle_Decision_Making_and_Motion_Planning.pdf",category:"学习与数据驱动控制",abstract:"利用 REDS 等变深度集网络监督学习混合整数最优控制解，并配合可行性投影器（FP）以提升实时性与安全性。",tags:["等变学习","混合整数","监督学习"]},
+  {id:31,title:"Adaptive_Robust_Data-Driven_Building_Control_via_Bilevel_Reformulation_An_Experimental_Result.pdf",category:"其他/跨域方法",abstract:"基于 Willems 基本引理的双层数据驱动鲁棒建筑控制器；在不额外建模前提下节能 18.4%，并维持舒适度。",tags:["数据驱动","鲁棒","建筑控制"]},
+  {id:32,title:"Optimal_Parameter_Selection_for_ADMM_Quadratically_Constrained_Quadratic_Program.pdf",category:"优化与求解器工程",abstract:"两种基于 ADMM 的 QCQP 实时求解：给出惩罚参数闭式最优与线性收敛；以及自适应惩罚向量的快速收敛残差平衡方法。",tags:["ADMM","QCQP","实时优化"]},
+  {id:12,title:"Automated_Lane_Merging_via_Game_Theory_and_Branch_Model_Predictive_Control.pdf",category:"决策与博弈",abstract:"将车辆交互建模为矩阵博弈，并以 BMPC 处理对手策略不确定；密集交通并道中生成安全、可行的轨迹。",tags:["并道","博弈","BMPC"]},
+  {id:34,title:"Online_Parameter_Identification_of_Cost_Functions_in_Generalized_Nash_Games.pdf",category:"决策与博弈",abstract:"研究广义纳什博弈中的在线成本参数辨识，提出算法并给 O(√K) 遗憾界；在纳什-古诺问题中数值验证。",tags:["广义纳什","参数辨识","在线学习"]},
+  {id:46,title:"Robust_Predictive_Motion_Planning_by_Learning_Obstacle_Uncertainty.pdf",category:"运动规划 / 轨迹规划",abstract:"在线学习障碍物不确定性，计算控制集并做前向可达分析，构造鲁棒 MPC，提升动态环境中的安全与效率。",tags:["障碍不确定","鲁棒","可达性"]},
+  {id:21,title:"Nonlinear_Adaptive_PID_Control_for_Nonlinear_Systems.pdf",category:"学习与数据驱动控制",abstract:"提出非线性自适应 PID：通过三种非线性调制函数重构广义误差，解决积分饱和；在不确定与扰动下实现全局全状态渐近跟踪。",tags:["自适应 PID","非线性","跟踪"]},
+  {id:45,title:"Safe_High-Performance_Autonomous_Off-Road_Driving_Using_Covariance_Steering_Stochastic_Model_Predictive_Control.pdf",category:"高速公路/越野子域",abstract:"协方差转向 CS-SMPC 处理加性高斯噪声与约束；在自主越野驾驶中数值与实验均显示安全且高性能。",tags:["越野","SMPC","协方差转向"]},
+  {id:10,title:"Polling-Systems-Based_Autonomous_Vehicle_Coordination_in_Traffic_Intersections_With_No_Traffic_Signals.pdf",category:"特定驾驶场景策略",abstract:"用轮询系统建模无信号交叉口协调控制；延迟较信号灯降低 1–2 个数量级，且保证安全。",tags:["交叉口","轮询系统","通行效率"]},
+  {id:26,title:"Robust_Data-Driven_Predictive_Control_for_Unknown_Linear_Systems_With_Bounded_Disturbances.pdf",category:"学习与数据驱动控制",abstract:"RDPC 框架：在未知 LTI 且有界扰动/测噪下，用 ISO 数据构建可能系统集合并设计控制器；扩展至不可测状态并在不稳定批反应器上验证。",tags:["RDPC","有界扰动","数据驱动"]},
+  {id:15,title:"Safe_and_Human-Like_Autonomous_Driving_A_PredictorCorrector_Potential_Game_Approach.pdf",category:"决策与博弈",abstract:"PCPG 势博弈：在人类样式的交互中进行预测-校正，实现未知成本下的安全与类人决策。",tags:["类人驾驶","博弈","交互"]},
+  {id:3,title:"Motion_Planning_in_Topologically_Complex_Environments_via_Hybrid_Feedback.pdf",category:"运动规划 / 轨迹规划",abstract:"在复杂拓扑环境中以混合反馈切换自由/避障模式，保证全局渐近稳定和避障安全到达。",tags:["混合反馈","复杂拓扑","避障"]},
+  {id:38,title:"Discrete-time_adaptive_windowing_for_velocity_estimation.pdf",category:"状态估计与滤波",abstract:"提出自适应窗口化速度估计，在抑噪与瞬态响应间实现无折衷；仿真与触觉设备控制实验优于有限差分/KF 等。",tags:["速度估计","自适应窗口","抑噪"]},
+  {id:47,title:"Safe_Reinforcement_Learning_Using_Robust_MPC.pdf",category:"学习与数据驱动控制",abstract:"将鲁棒 MPC 作为函数逼近器嵌入 RL，参数在 RL 框架内更新，实现满足安全约束的最优控制。",tags:["RL","鲁棒 MPC","安全"]},
+  {id:14,title:"cut-in.pdf",category:"特定驾驶场景策略",abstract:"动态车队管理与协作驾驶框架（观测→预测→变道）以抑制社会车辆切入；分布式观测器与控制器提升队列安全与效率。",tags:["车队","cut-in","协作驾驶"]},
+  {id:11,title:"Stochastic_Time-Optimal_Trajectory_Planning_for_Connected_and_Automated_Vehicles_in_Mixed-Traffic_Merging_Scenarios.pdf",category:"特定驾驶场景策略",abstract:"基于随机控制的合流时间最优规划；用 BLR-Newell 跟车模型预测人类驾驶并量化不确定性，实现鲁棒与实时可行。",tags:["合流","并道","时间最优","混合交通"]},
+  {id:18,title:"Incorporating_ESO_into_Deep_Koopman_Operator_Modeling_for_Control_of_Autonomous_Vehicles.pdf",category:"学习与数据驱动控制",abstract:"深度 Koopman + 扩展状态观测器（ESO）在线估计总扰动，改进线性表示与轨迹跟踪控制的泛化与精度。",tags:["Koopman","ESO","轨迹跟踪"]},
+  {id:32.1,title:"Optimal_Parameter_Selection_for_ADMM_Quadratically_Constrained_Quadratic_Program.pdf#note",category:"优化与求解器工程",abstract:"【注】此条与 32 相同论文条目，保留主条 32；如需不同版本/补充，可删除本注释条。",tags:["重复条目说明"]},
+  {id:4,title:"Reachability-Based_Planning_of_Time-Optimal_Curvature-Constrained_Path_With_Moving_and_Deforming_Obstacles.pdf",category:"运动规划 / 轨迹规划",abstract:"以可达性+变分不等式（VI）进行前向传播并结合 ODE/后向可达回溯，求解曲率受限且含移动/变形障碍的时间最优路径。",tags:["时间最优","可达性","曲率约束","障碍"]},
+  {id:5,title:"Real-Time_Mixed-Integer_Quadratic_Programming_for_Vehicle_Decision-Making_and_Motion_Planning.pdf",category:"运动规划 / 轨迹规划",abstract:"基于 MIQP 的实时决策与运动规划（线性车辆+混合整数约束：变道/避障/交规）；嵌入式求解器 BB-ASIPM 验证实时性与硬件可行。",tags:["MIQP","实时","变道","避障"]},
+  {id:23.1,title:"Predictive_Control_for_Autonomous_Driving_With_Uncertain_Multimodal_Predictions.pdf#vehicle",category:"MPC 家族",abstract:"【注】此条为 23 的同名版本占位，用于演示相同标题多版本的链接能力；实际数据以 23 为准。",tags:["多版本演示"]},
+  {id:13,title:"Interaction-Aware_Optimal_Safe_Speed_Control_for_Autonomous_Vehicles_Approaching_Unsignalized_Crosswalks_With_Pedestrians.pdf",category:"MPC 家族",abstract:"针对无信号人行横道，采用场景/网格化 SMPC 与概率 NN 进行安全控速；大规模随机仿真优于基线在时间与碰撞风险上。",tags:["行人","横道","SMPC","控速"]}
+];
+
+// —— 其余条目数量检查 ——
+if(papers.filter(p=>Number.isInteger(p.id)).length !== 50){
+  console.warn("⚠️ 当前整表有效整数 ID 数量为", papers.filter(p=>Number.isInteger(p.id)).length, "，应为 50。若少于 50，请在数据区补齐。");
+}
+
+/**
+ * ===== UI 逻辑 =====
+ */
+const elCards = document.getElementById('cards');
+const elQ = document.getElementById('q');
+const elCategory = document.getElementById('category');
+const elCount = document.getElementById('count');
+const elActive = document.getElementById('activeFilters');
+const elSceneChips = document.getElementById('sceneChips');
+const elReset = document.getElementById('reset');
+
+elReset.addEventListener('click',()=>{
+  elQ.value=''; elCategory.value=''; selectedScenes.clear();
+  [...elSceneChips.children].forEach(ch=>{ch.dataset.on='0'; ch.setAttribute('aria-pressed','false');});
+  render();
+});
+
+function initCategoryOptions(){
+  const cats = [...new Set(papers.map(p=>p.category))].sort();
+  for(const c of cats){
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c; elCategory.appendChild(opt);
+  }
+}
+
+function initSceneChips(){
+  SCENES.forEach(s=>{
+    const chip=document.createElement('button');chip.type='button';chip.className='chip';
+    chip.textContent=s; chip.dataset.on='0'; chip.setAttribute('aria-pressed','false');
+    chip.addEventListener('click',()=>{
+      chip.dataset.on = chip.dataset.on==='1'?'0':'1';
+      chip.setAttribute('aria-pressed', chip.dataset.on==='1'?'true':'false');
+      if(chip.dataset.on==='1') selectedScenes.add(s); else selectedScenes.delete(s);
+      render();
+    });
+    elSceneChips.appendChild(chip);
+  });
+}
+
+function fileHref(title){
+  const fileName = title.split('#')[0]; // 移除锚点占位后缀，匹配真实文件
+  return `${basePath}/${encodeURIComponent(fileName)}`;
+}
+
+function matchFilter(p){
+  const q = (elQ.value||'').trim().toLowerCase();
+  const cat = elCategory.value;
+  const scenes = [...selectedScenes];
+  const text = `${p.title} ${p.abstract} ${(p.tags||[]).join(' ')}`.toLowerCase();
+  const hitQ = q? text.includes(q): true;
+  const hitC = cat? p.category===cat: true;
+  const hitS = scenes.length? scenes.some(s=> (p.tags||[]).includes(s) ): true; // OR 逻辑
+  return hitQ && hitC && hitS;
+}
+
+function render(){
+  const items = papers.filter(matchFilter).sort((a,b)=>a.id-b.id);
+  elCards.innerHTML='';
+  elCount.textContent = items.filter(p=>Number.isInteger(p.id)).length;
+  const fs=[];
+  if(elCategory.value) fs.push(`类别：${elCategory.value}`);
+  if(selectedScenes.size) fs.push(`场景：${[...selectedScenes].join('、')}`);
+  if(elQ.value.trim()) fs.push(`关键词："${elQ.value.trim()}"`);
+  elActive.textContent = fs.length? `当前筛选 → ${fs.join(' · ')}`: '';
+  const filtersActive = Boolean(elCategory.value || selectedScenes.size || elQ.value.trim());
+  elReset.disabled = !filtersActive;
+
+  for(const p of items){
+    const card = document.createElement('article');
+    card.className='card';
+
+    const head = document.createElement('div');
+    head.className='card-head';
+
+    const left = document.createElement('div');
+    left.style.display='flex';
+    left.style.flexDirection='column';
+    left.style.gap='10px';
+
+    const titleLink = document.createElement('a');
+    titleLink.className='card-title';
+    titleLink.href=fileHref(p.title);
+    const formattedTitle = p.title.split('#')[0].replace(/_/g,' ');
+    titleLink.textContent=formattedTitle;
+    titleLink.title=formattedTitle+' · 点击打开对应的 PDF（新标签页）';
+    titleLink.target='_blank';
+
+    const badge = document.createElement('span');
+    badge.className='badge';
+    badge.textContent=p.category;
+
+    left.appendChild(titleLink);
+    left.appendChild(badge);
+
+    const id = document.createElement('span');
+    id.className='card-id';
+    id.textContent = `#${p.id}`;
+
+    head.appendChild(left);
+    head.appendChild(id);
+
+    const tags = document.createElement('div');
+    tags.className='tags';
+    (p.tags||[]).forEach(t=>{
+      const span=document.createElement('span');
+      span.className='tag';
+      span.textContent=t;
+      tags.appendChild(span);
+    });
+
+    const abs = document.createElement('p');
+    abs.className='abs clamped';
+    abs.textContent = p.abstract;
+
+    const toggle = document.createElement('button');
+    toggle.type='button';
+    toggle.className='toggle';
+    toggle.textContent='展开详情';
+    toggle.addEventListener('click',()=>{
+      const expanded = !abs.classList.contains('clamped');
+      if(expanded){
+        abs.classList.add('clamped');
+        toggle.textContent='展开详情';
+      }else{
+        abs.classList.remove('clamped');
+        toggle.textContent='收起';
+      }
+    });
+
+    card.appendChild(head);
+    if(tags.children.length) card.appendChild(tags);
+    card.appendChild(abs);
+    if(p.abstract && p.abstract.length > 120){
+      card.appendChild(toggle);
+    }
+    elCards.appendChild(card);
+  }
+}
+
+// 快捷键：按 / 聚焦搜索
+window.addEventListener('keydown',e=>{
+  if(e.key==='/' && document.activeElement!==elQ){
+    e.preventDefault(); elQ.focus();
+  }
+});
+
+// 事件绑定
+elQ.addEventListener('input', render);
+elCategory.addEventListener('change', render);
+
+// 初始化
+initCategoryOptions(); initSceneChips(); render();
+
+/**
+ * ===== 轻量内置测试（不修改你的数据） =====
+ */
+(function tests(){
+  const asserts=[]; const ok=(name,cond)=>asserts.push({name,cond});
+  ok('selectedScenes 已初始化', selectedScenes instanceof Set);
+  ok('空筛选应包含 #1 超车论文', papers.find(p=>p.id===1) && matchFilter(papers.find(p=>p.id===1))===true);
+  selectedScenes.add('并道');
+  const pass = papers.filter(matchFilter).every(p=> (p.tags||[]).includes('并道'));
+  ok('并道筛选仅返回包含并道标签的条目（OR 集合单元素）', pass);
+  selectedScenes.clear(); render();
+  if(console && console.table) console.table(asserts.map(x=>({测试:x.name, 结果:x.cond?'✅':'❌'})));
+})();
+</script>
+</body>
+</html>
