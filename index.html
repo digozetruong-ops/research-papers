@@ -136,22 +136,22 @@ const selectedScenes = new Set(); // ⚠️ 保证在任何函数使用前已初
  * 9. 高速公路/越野子域 10. 优化与求解器工程 11. 其他/跨域方法 12. 端到端概念/一体化框架
  */
 const papers = [
-  {id:16,title:"2307.11515v1-Forward Completeness and Applications to Control.pdf",category:"安全性与可达性理论",abstract:"提出松弛 Lyapunov 条件保证全局正向完备性，并用于无车道巡航控制；可处理碰撞避免、变宽道路、匝道与不同设定速度，确保车辆不碰撞或越界。",tags:["安全","正向完备性","Lyapunov","巡航"]},
-  {id:35,title:"A_new_look_at_the_statistical_model_identification.pdf",category:"其他/跨域方法",abstract:"Akaike 提出 AIC 模型选择准则，替代传统假设检验；以时间序列为例展示其在预测/泛化权衡中的有效性与灵活性。",tags:["AIC","统计建模","模型选择"]},
-  {id:50,title:"An_Angle-Based_Control_Law_for_Target_Location_Stabilization_in_3D_Space.pdf",category:"其他/跨域方法",abstract:"提出仅使用三个地面站方位角测量的 3D 目标定位控制律；无需 GPS，保证全局收敛且与机体坐标无关，适合弱感知环境。",tags:["3D 方位","弱感知","飞行控制"]},
+  {id:16,title:"2307.11515v1-Forward Completeness and Applications to Control.pdf",category:"安全性与可达性理论",abstract:"提出松弛 Lyapunov 条件保证全局正向完备性，并用于无车道巡航控制；可处理碰撞避免、变宽道路、匝道与不同设定速度，确保车辆不碰撞或越界。提供了一种理论上可靠的方法来设计大规模、分散式的自动驾驶协调策略，能够适应复杂的道路环境，如匝道、并道和可变宽度的道路。",tags:["安全","正向完备性","Lyapunov","巡航"]},
+  {id:35,title:"A_new_look_at_the_statistical_model_identification.pdf",category:"其他/跨域方法",abstract:"Akaike 提出 AIC 模型选择准则，替代传统假设检验；以时间序列为例展示其在预测/泛化权衡中的有效性与灵活性。AIC已经成为统计学、机器学习、生态学、经济学等几乎所有依赖数据建模的科学领域中最重要、最广泛使用的模型选择工具之一。它为如何在“拟合不足”和“过拟合”之间取得平衡提供了一个坚实的理论基础。",tags:["AIC","统计建模","模型选择"]},
+  {id:50,title:"An_Angle-Based_Control_Law_for_Target_Location_Stabilization_in_3D_Space.pdf",category:"其他/跨域方法",abstract:"提出仅使用三个地面站方位角测量的 3D 目标定位控制律；无需 GPS，保证全局收敛且与机体坐标无关，适合弱感知环境。它不依赖距离或绝对位置信息，仅需视觉传感器或定向天线等设备进行角度测量，可靠性高，适用于深空探测、水下机器人导航等挑战性场景。",tags:["3D 方位","弱感知","飞行控制"]},
   {id:7,title:"An_Optimization-Based_Dynamic_Reordering_Heuristic_for_Coordination_of_Vehicles_in_Mixed_Traffic_Intersections.pdf",category:"特定驾驶场景策略",abstract:"在混合交通路口提出动态重排序启发式以协调 CAV 与 HDV 通过顺序；结合违规检查与成本比较显著提效并稳定。",tags:["交叉口","重排序","混合交通"]},
   {id:29,title:"Automatic_Implementation_of_Neural_Networks_Through_Reaction_NetworksPart_I_Circuit_Design_and_Convergence_Analysis.pdf",category:"其他/跨域方法",abstract:"用生化反应网络（BCRN）实现三层 FCNN：设计分配/前馈/判断/学习/清除模块，并证明指数收敛；为物理可实现学习提供思路。",tags:["BCRN","神经网络","收敛性"]},
   {id:33,title:"A_Game-Based_Approach_to_Distributed_Least-Distance_Formation_Tracking_With_a_Moving_Target.pdf",category:"决策与博弈",abstract:"提出基于博弈的分布式最小距离编队跟踪：纳什均衡求解 + 一致性协议，使多智能体围绕移动目标形成期望队形并最小化距离。",tags:["编队","博弈","纳什"]},
   {id:36,title:"Adaptive_Choice_of_Process_Noise_Covariance_in_Kalman_Filter_Using_Measurement_Matrices.pdf",category:"状态估计与滤波",abstract:"基于测量矩阵自适应选择 KF 的过程噪声协方差 Q，避免误差协方差膨胀；GNSS/INS 汽车定位实测优于传统方法。",tags:["卡尔曼","GNSS/INS","Q 调整","定位"]},
   {id:19,title:"Automatic_Nonlinear_MPC_Approximation_With_Closed-Loop_Guarantees.pdf",category:"MPC 家族",abstract:"ALKIA-X：自动显式近似非线性 MPC，结合核插值、自适应子域划分与 RKHS 外推，给稳定与约束保证，适配高采样率。",tags:["显式 MPC","近似","稳定保证"]},
-  {id:40,title:"Adaptive_Control_Barrier_Functions.pdf",category:"安全性与可达性理论",abstract:"提出自适应 CBF（PACBF/RACBF）以处理时变控制边界与噪声下的可行性；在自适应巡航控制（ACC）中验证有效。",tags:["CBF","安全约束","ACC"]},
+  {id:40,title:"Adaptive_Control_Barrier_Functions.pdf",category:"安全性与可达性理论",abstract:"提出自适应 CBF（PACBF/RACBF）以处理时变控制边界与噪声下的可行性；在自适应巡航控制（ACC）中验证有效。极大地增强了CBF方法在真实复杂环境下的实用性和鲁棒性。",tags:["CBF","安全约束","ACC"]},
   {id:6,title:"Decision-Making_for_Autonomous_Vehicles_With_Interaction-Aware_Behavioral_Prediction_and_Social-Attention_Neural_Network.pdf",category:"交互感知与人机协作",abstract:"行为模型+贝叶斯滤波+社会注意力网络（SANN）进行交互感知并道决策；模拟与实测数据集上成功完成强制并道。",tags:["并道","意图预测","注意力"]},
   {id:42,title:"Data-Driven_Closed-Loop_Reachability_Analysis_for_Nonlinear_Human-in-the-Loop_Systems_Using_Gaussian_Mixture_Model.pdf",category:"安全性与可达性理论",abstract:"用 GMM/GMR 显式建模人类策略，做非线性人机闭环系统的前向随机可达性分析，生成更准确、信息量更高的结果。",tags:["可达性","人机闭环","GMM"]},
-  {id:1,title:"How_should_an_autonomous_vehicle_overtake_a_slower_moving_vehicle_design_and_analysis_of_an_optimal_trajectory.pdf",category:"特定驾驶场景策略",abstract:"研究正常条件下的三阶段超车最优轨迹；最小总动能+最小抖动，给出高初速下最佳距离/时间的显式估计公式。",tags:["超车","轨迹优化","高速"]},
+  {id:1,title:"How_should_an_autonomous_vehicle_overtake_a_slower_moving_vehicle_design_and_analysis_of_an_optimal_trajectory.pdf",category:"特定驾驶场景策略",abstract:"研究正常条件下的三阶段超车最优轨迹；最小总动能+最小抖动，给出高初速下最佳距离/时间的显式估计公式。该研究的成果可以让一辆配备了适当传感器的自动驾驶汽车，根据自身的车速、预设的最大加速度和车道宽度，实时计算出超车的最佳时机、位置、所需时间和距离 。",tags:["超车","轨迹优化","高速"]},
   {id:41,title:"Event-Triggered_and_Intermittent_Emulation_of_Safety-Critical_Controllers_for_Nonlinear_Systems.pdf",category:"安全性与可达性理论",abstract:"在算力/通信受限下，采用动态事件触发与间歇控制仿真安全关键控制器；保证前向不变性、渐近收敛并避免 Zeno。",tags:["事件触发","安全控制","资源受限"]},
   {id:17,title:"Data-Driven_Combined_Longitudinal_and_Lateral_Control_for_the_Car_Following_Problem.pdf",category:"学习与数据驱动控制",abstract:"采用 ADP+RL 学习车随动纵向/横向联合控制，无需精确模型；在多场景下验证能保持安全距离且稳态控道。",tags:["数据驱动","ADP","RL","车随动"]},
   {id:24,title:"Data-Driven_Model_Predictive_Control_With_Stability_and_Robustness_Guarantees.pdf",category:"学习与数据驱动控制",abstract:"基于行为系统理论的 DD-MPC：用过去轨迹作隐式模型，无需预识别；证明无噪声指数稳定与有噪声情形的实用指数稳定。",tags:["数据驱动 MPC","稳定性","鲁棒性"]},
-  {id:39,title:"Automated_Controller_Calibration_by_Kalman_Filtering.pdf",category:"状态估计与滤波",abstract:"以卡尔曼滤波递归估计控制器参数，配合训练目标优化闭环性能；已在车载高保真模拟器与嵌入式平台验证可行。",tags:["标定","卡尔曼","参数估计"]},
+  {id:39,title:"Automated_Controller_Calibration_by_Kalman_Filtering.pdf",category:"状态估计与滤波",abstract:"以卡尔曼滤波递归估计控制器参数，配合训练目标优化闭环性能；已在车载高保真模拟器与嵌入式平台验证可行。提供了一个强大、灵活且易于实现的框架，用于自动化控制器设计和在线性能优化，大大减少了人工调试成本，并能使系统在整个生命周期内保持高性能。",tags:["标定","卡尔曼","参数估计"]},
   {id:2,title:"Fast_Analytical_Solver_for_Fuel-Optimal_Speed_Trajectory_of_Connected_and_or_Automated_Vehicles.pdf",category:"优化与求解器工程",abstract:"提出解析求解器计算 CAV 燃油最优速度轨迹；利用 BVP 成本动态与可行控制序列识别，显著降时延并提升鲁棒。",tags:["解析求解器","速度规划","燃油优化","高速"]},
   {id:30,title:"Automatic_Implementation_of_Neural_Networks_Through_Reaction_NetworksPart_II_Error_Analysis.pdf",category:"其他/跨域方法",abstract:"提出 BCRN 实现神经网络的误差分析框架，定义当前/累积误差并给出上界，证明有限时间内误差指数收敛。",tags:["BCRN","误差分析","收敛性"]},
   {id:37,title:"Distributed_Invariant_Extended_Kalman_Filter_Using_Lie_Groups_Algorithm_and_Experiments.pdf",category:"状态估计与滤波",abstract:"提出 DIEKF（矩阵李群）用于分布式 6DoF 目标跟踪；仅需一跳通信，具备更高一致性与精度，即便目标运动未知。",tags:["分布式估计","IEKF","李群","6DoF"]},
@@ -183,10 +183,10 @@ const papers = [
   {id:14,title:"cut-in.pdf",category:"特定驾驶场景策略",abstract:"动态车队管理与协作驾驶框架（观测→预测→变道）以抑制社会车辆切入；分布式观测器与控制器提升队列安全与效率。",tags:["车队","cut-in","协作驾驶"]},
   {id:11,title:"Stochastic_Time-Optimal_Trajectory_Planning_for_Connected_and_Automated_Vehicles_in_Mixed-Traffic_Merging_Scenarios.pdf",category:"特定驾驶场景策略",abstract:"基于随机控制的合流时间最优规划；用 BLR-Newell 跟车模型预测人类驾驶并量化不确定性，实现鲁棒与实时可行。",tags:["合流","并道","时间最优","混合交通"]},
   {id:18,title:"Incorporating_ESO_into_Deep_Koopman_Operator_Modeling_for_Control_of_Autonomous_Vehicles.pdf",category:"学习与数据驱动控制",abstract:"深度 Koopman + 扩展状态观测器（ESO）在线估计总扰动，改进线性表示与轨迹跟踪控制的泛化与精度。",tags:["Koopman","ESO","轨迹跟踪"]},
-  {id:32.1,title:"Optimal_Parameter_Selection_for_ADMM_Quadratically_Constrained_Quadratic_Program.pdf#note",category:"优化与求解器工程",abstract:"【注】此条与 32 相同论文条目，保留主条 32；如需不同版本/补充，可删除本注释条。",tags:["重复条目说明"]},
+  // {id:32.1,title:"Optimal_Parameter_Selection_for_ADMM_Quadratically_Constrained_Quadratic_Program.pdf#note",category:"优化与求解器工程",abstract:"【注】此条与 32 相同论文条目，保留主条 32；如需不同版本/补充，可删除本注释条。",tags:["重复条目说明"]},
   {id:4,title:"Reachability-Based_Planning_of_Time-Optimal_Curvature-Constrained_Path_With_Moving_and_Deforming_Obstacles.pdf",category:"运动规划 / 轨迹规划",abstract:"以可达性+变分不等式（VI）进行前向传播并结合 ODE/后向可达回溯，求解曲率受限且含移动/变形障碍的时间最优路径。",tags:["时间最优","可达性","曲率约束","障碍"]},
   {id:5,title:"Real-Time_Mixed-Integer_Quadratic_Programming_for_Vehicle_Decision-Making_and_Motion_Planning.pdf",category:"运动规划 / 轨迹规划",abstract:"基于 MIQP 的实时决策与运动规划（线性车辆+混合整数约束：变道/避障/交规）；嵌入式求解器 BB-ASIPM 验证实时性与硬件可行。",tags:["MIQP","实时","变道","避障"]},
-  {id:23.1,title:"Predictive_Control_for_Autonomous_Driving_With_Uncertain_Multimodal_Predictions.pdf#vehicle",category:"MPC 家族",abstract:"【注】此条为 23 的同名版本占位，用于演示相同标题多版本的链接能力；实际数据以 23 为准。",tags:["多版本演示"]},
+  // {id:23.1,title:"Predictive_Control_for_Autonomous_Driving_With_Uncertain_Multimodal_Predictions.pdf#vehicle",category:"MPC 家族",abstract:"【注】此条为 23 的同名版本占位，用于演示相同标题多版本的链接能力；实际数据以 23 为准。",tags:["多版本演示"]},
   {id:13,title:"Interaction-Aware_Optimal_Safe_Speed_Control_for_Autonomous_Vehicles_Approaching_Unsignalized_Crosswalks_With_Pedestrians.pdf",category:"MPC 家族",abstract:"针对无信号人行横道，采用场景/网格化 SMPC 与概率 NN 进行安全控速；大规模随机仿真优于基线在时间与碰撞风险上。",tags:["行人","横道","SMPC","控速"]}
 ];
 
