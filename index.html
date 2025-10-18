@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>自动驾驶论文知识树 · 50篇（可筛选）</title>
+  <title>自动驾驶论文) </title>
   <style>
     :root{
       --bg:#1b1f2a;
@@ -103,9 +103,11 @@
     <!-- Results Info -->
     <div class="panel" id="infoPanel">
       <div class="controls">
-        <div>结果：<b id="count">0</b> / 50</div>
-        <div class="muted small" id="activeFilters"></div>
-      </div>
+          <div>总数：<b id="count">0</b> </div>
+          <!-- ID 排序切换按钮：点击切换升/降序 -->
+          <button id="sortToggle" class="btn small" type="button" aria-pressed="false">ID 排序：升序</button>
+          <div class="muted small" id="activeFilters"></div>
+        </div>
     </div>
 
     <!-- Cards -->
@@ -190,7 +192,8 @@ const papers = [
   {id:13,title:"Interaction-Aware_Optimal_Safe_Speed_Control_for_Autonomous_Vehicles_Approaching_Unsignalized_Crosswalks_With_Pedestrians.pdf",category:"MPC 家族",abstract:"针对无信号人行横道，采用场景/网格化 SMPC 与概率 NN 进行安全控速；大规模随机仿真优于基线在时间与碰撞风险上。",tags:["行人","横道","SMPC","控速"]},
   {id:51,title:"Game_Theoretic_Modeling_of_Vehicle_Interactions_at_Unsignalized_Intersections_and_Application_to_Autonomous_Vehicle_Control.pdf",category:"决策与博弈",abstract:"基于 Level-k 博弈论为无信号交叉口的车辆交互建模，并设计多模型自适应控制器；通过在线观察与信念更新，识别对手推理层级并最大化期望回报，能鲁棒地处理与未知类型驾驶员的交互。该控制器能够在线学习和适应不同类型的驾驶员，从而做出更智能、更安全的决策。",tags:["交叉口","博弈","Level-k","自适应"]},
   {id:52.1,title:"Receding Horizon Motion Planning for Automated Lane Change and.pdf",category:"运动规划 / 轨迹规划",abstract:"提出基于蒙特卡洛树搜索（MCTS）的 receding horizon 实时路径规划算法；结合 Level-k 博弈论预测邻车策略，在高速公路换道/并线场景中快速生成近优轨迹。该框架重点在于通过 MCTS 快速求解一个基于固定预测的规划问题，满足实时性要求。",tags:["并道","换道","MCTS","Level-k","运动规划"]},
-  {id:52,title:"Receding Horizon Motion Planning for Automated Lane Change and.pdf",category:"决策与博弈",abstract:"提出基于蒙特卡洛树搜索（MCTS）的 receding horizon 实时路径规划算法；结合 Level-k 博弈论预测邻车策略，在高速公路换道/并线场景中快速生成近优轨迹。该框架重点在于通过 MCTS 快速求解一个基于固定预测的规划问题，满足实时性要求。",tags:["并道","换道","MCTS","Level-k","运动规划"]}
+  {id:52,title:"Receding Horizon Motion Planning for Automated Lane Change and.pdf",category:"决策与博弈",abstract:"提出基于蒙特卡洛树搜索（MCTS）的 receding horizon 实时路径规划算法；结合 Level-k 博弈论预测邻车策略，在高速公路换道/并线场景中快速生成近优轨迹。该框架重点在于通过 MCTS 快速求解一个基于固定预测的规划问题，满足实时性要求。",tags:["并道","换道","MCTS","Level-k","运动规划"]},
+  {id: 53, title: "Human-Like Decision Making for Autonomous Driving A Noncooperative Game Theoretic Approach.pdf", category: "决策与博弈", abstract: "为自动驾驶汽车设计类人决策框架，使其更好融入人类交通生态并提供个性化驾驶风格（激进/普通/保守）。通过调整安全、舒适、效率的代价权重建模不同风格，并应用非合作博弈（纳什均衡NE/斯塔克尔伯格均衡SE）进行换道决策。结合人工势场与MPC进行运动规划。结果表明SE优于NE（成本降低>20%），框架能生成反映不同风格的合理决策。", tags: ["类人驾驶", "决策", "博弈", "驾驶风格", "MPC"]}
 ];
 
 // —— 其余条目数量检查 ——
@@ -208,6 +211,10 @@ const elCount = document.getElementById('count');
 const elActive = document.getElementById('activeFilters');
 const elSceneChips = document.getElementById('sceneChips');
 const elReset = document.getElementById('reset');
+const elSort = document.getElementById('sortToggle');
+
+// 当前排序方向：false 表示升序（默认），true 表示降序
+let sortDesc = false;
 
 elReset.addEventListener('click',()=>{
   elQ.value=''; elCategory.value=''; selectedScenes.clear();
@@ -254,7 +261,8 @@ function matchFilter(p){
 }
 
 function render(){
-  const items = papers.filter(matchFilter).sort((a,b)=>a.id-b.id);
+  // 根据 sortDesc 决定升序或降序（默认升序）
+  const items = papers.filter(matchFilter).sort((a,b)=> sortDesc ? (b.id - a.id) : (a.id - b.id));
   elCards.innerHTML='';
   elCount.textContent = items.filter(p=>Number.isInteger(p.id)).length;
   const fs=[];
@@ -347,6 +355,16 @@ window.addEventListener('keydown',e=>{
 // 事件绑定
 elQ.addEventListener('input', render);
 elCategory.addEventListener('change', render);
+
+// sort toggle event binding (exists in DOM)
+if(elSort){
+  elSort.addEventListener('click', ()=>{
+    sortDesc = !sortDesc;
+    elSort.setAttribute('aria-pressed', sortDesc ? 'true' : 'false');
+    elSort.textContent = sortDesc ? 'ID 排序：降序' : 'ID 排序：升序';
+    render();
+  });
+}
 
 // 初始化
 initCategoryOptions(); initSceneChips(); render();
